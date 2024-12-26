@@ -14,7 +14,7 @@
     'use strict';
 
     // Customize the number of days
-    const DAYS_THRESHOLD = 30; // Change this value as needed
+    const DAYS_THRESHOLD = 3; // Change this value as needed
 
     // Helper function to parse the date from the datetime attribute
     function parsePostDate(dateString) {
