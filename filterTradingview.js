@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Remove Old and Unpopular TradingView Posts
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.3
 // @description  Removes TradingView posts older than a specified number of days, and posts by users that don't have enough rating
 // @author       Dan Adrian Mirea
 // @match        https://www.tradingview.com/symbols/*/ideas/?video=no
