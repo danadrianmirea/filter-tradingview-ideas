@@ -14,9 +14,8 @@
     'use strict';
 
     // Customize the number of days
-    const DAYS_THRESHOLD = 3; // Change this value as needed
+    const DAYS_THRESHOLD = 1; 
 
-    // Helper function to parse the date from the datetime attribute
     function parsePostDate(dateString) {
         return new Date(dateString);
     }
@@ -39,9 +38,7 @@
         });
     }
 
-    // Run the script initially and observe DOM changes
     const observer = new MutationObserver(removeOldPosts);
-
     observer.observe(document.body, { childList: true, subtree: true });
     removeOldPosts();
 })();
