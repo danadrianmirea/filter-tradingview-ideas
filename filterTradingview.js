@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Remove Old and Unpopular TradingView Posts
 // @namespace    http://tampermonkey.net/
-// @version      0.3
+// @version      0.4
 // @description  Removes TradingView posts older than a specified number of days, and posts by users that don't have enough rating
 // @author       Dan Adrian Mirea
 // @match        https://www.tradingview.com/symbols/*/ideas/?video=no
@@ -14,47 +14,22 @@
     'use strict';
 
     // Customize the number of days
-    const DAYS_THRESHOLD = 3; // Change this value as needed
+    const DAYS_THRESHOLD = 30; // Change this value as needed
 
-    // Helper function to parse the date from the post element
+    // Helper function to parse the date from the datetime attribute
     function parsePostDate(dateString) {
-        // TradingView usually displays dates like "2 days ago", "1 month ago", etc.
-        const now = new Date();
-        const match = dateString.match(/(\d+)\s+(minute|hour|day|week|month|year)s?\s+ago/);
-
-        if (match) {
-            const value = parseInt(match[1], 10);
-            const unit = match[2];
-
-            switch (unit) {
-                case "minute":
-                    return new Date(now.getTime() - value * 60000); // 60 * 1000
-                case "hour":
-                    return new Date(now.getTime() - value * 3600000); // 60 * 60 * 1000
-                case "day":
-                    return new Date(now.getTime() - value * 86400000); // 24 * 60 * 60 * 1000
-                case "week":
-                    return new Date(now.getTime() - value * 604800000); // 7 * 24 * 60 * 60 * 1000
-                case "month":
-                    return new Date(now.setMonth(now.getMonth() - value));
-                case "year":
-                    return new Date(now.setFullYear(now.getFullYear() - value));
-            }
-        }
-
-        // If the format doesn't match, return now (to avoid false positives)
-        return now;
+        return new Date(dateString);
     }
 
     // Function to remove old posts
     function removeOldPosts() {
-        const posts = document.querySelectorAll("div[data-widget-type='idea']");
+        const posts = document.querySelectorAll("article");
 
         posts.forEach(post => {
-            const dateElement = post.querySelector(".tv-card-stats__time");
+            const timeElement = post.querySelector("time[datetime]");
 
-            if (dateElement) {
-                const postDate = parsePostDate(dateElement.textContent.trim());
+            if (timeElement) {
+                const postDate = parsePostDate(timeElement.getAttribute("datetime"));
                 const ageInDays = (new Date() - postDate) / 86400000; // Milliseconds to days
 
                 if (ageInDays > DAYS_THRESHOLD) {
